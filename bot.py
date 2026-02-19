@@ -22,7 +22,7 @@ load_dotenv()
 
 # Конфигурационные переменные
 CONFIG = {
-    "GROUP_USER_ID": int(os.getenv("GROUP_USER_ID", 1087968824)),
+    "GROUP_USER_ID": int(os.getenv("GROUP_USER_ID", -1003423286221)),
     "CHAT_IDS": list(map(int, os.getenv("CHAT_IDS", "").split(','))),
     "JOURNAL_CHAT_ID": int(os.getenv("JOURNAL_CHAT_ID")),
     "CHANNEL_ID": int(os.getenv("CHANNEL_ID")),
