@@ -1,3 +1,70 @@
+// ========== КАТЕГОРИИ И РАБОТА С URL ==========
+
+// Функция для обновления URL без перезагрузки страницы
+function updateURL(category) {
+    let url = new URL(window.location.href);
+    if (category && category !== 'all') {
+        url.searchParams.set('cat', category);
+    } else {
+        url.searchParams.delete('cat');
+    }
+    window.history.pushState({}, '', url);
+}
+
+// Функция для получения категории из URL
+function getCategoryFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('cat');
+}
+
+// Обновленная функция открытия категории
+function openCategory(cat) {
+    navigateTo('shop');
+    updateURL(cat);
+    
+    let filteredProducts;
+    if (cat === 'all' || !cat) {
+        filteredProducts = products;
+    } else {
+        filteredProducts = products.filter(p => p.category === cat);
+    }
+    
+    const grid = document.getElementById('productsGrid');
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = `<div style="text-align: center; padding: 50px; color: var(--text-muted);">Нет товаров в этой категории</div>`;
+    } else {
+        grid.innerHTML = filteredProducts.map(p => `
+            <div class="product-card">
+                <i class="fas fa-tag" style="font-size: 2rem; color: var(--accent-red);"></i>
+                <h3>${p.name}</h3>
+                <div class="product-price">${p.price} DC</div>
+                <div style="color: var(--text-muted);">Продавец: ${p.seller}</div>
+                <button class="product-btn" onclick="buyProduct('${p.name}', ${p.price}, ${p.id}, '${p.seller}', 'dravix')">Купить</button>
+            </div>
+        `).join('');
+    }
+}
+
+// Обновленная функция отображения всех товаров с учетом URL
+function renderProducts() {
+    const category = getCategoryFromURL();
+    if (category) {
+        openCategory(category);
+    } else {
+        const grid = document.getElementById('productsGrid');
+        if (!grid) return;
+        grid.innerHTML = products.map(p => `
+            <div class="product-card">
+                <i class="fas fa-tag" style="font-size: 2rem; color: var(--accent-red);"></i>
+                <h3>${p.name}</h3>
+                <div class="product-price">${p.price} DC</div>
+                <div style="color: var(--text-muted);">Продавец: ${p.seller}</div>
+                <button class="product-btn" onclick="buyProduct('${p.name}', ${p.price}, ${p.id}, '${p.seller}', 'dravix')">Купить</button>
+            </div>
+        `).join('');
+    }
+}
+
 // ========== ПОКУПКА ==========
 let currentOrder = null;
 
@@ -86,21 +153,7 @@ function closeConfirmModal() {
     currentOrder = null; 
 }
 
-// ========== ОТОБРАЖЕНИЕ ==========
-function renderProducts() {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
-    grid.innerHTML = products.map(p => `
-        <div class="product-card">
-            <i class="fas fa-tag" style="font-size: 2rem; color: var(--accent-red);"></i>
-            <h3>${p.name}</h3>
-            <div class="product-price">${p.price} DC</div>
-            <div style="color: var(--text-muted);">Продавец: ${p.seller}</div>
-            <button class="product-btn" onclick="buyProduct('${p.name}', ${p.price}, ${p.id}, '${p.seller}', 'dravix')">Купить</button>
-        </div>
-    `).join('');
-}
-
+// ========== ОТОБРАЖЕНИЕ ТОВАРОВ ПРОДАВЦОВ ==========
 function renderSellerProducts() {
     const grid = document.getElementById('sellerProductsGrid');
     if (!grid) return;
@@ -116,18 +169,6 @@ function renderSellerProducts() {
             <div style="color: var(--text-muted);">Продавец: ${p.seller}</div>
             <div style="font-size: 0.8rem; margin: 10px 0;">${p.desc || ''}</div>
             <button class="product-btn" onclick="buyProduct('${p.name}', ${p.price}, ${p.id}, '${p.seller}', 'seller')">Купить</button>
-        </div>
-    `).join('');
-}
-
-function openCategory(cat) { 
-    navigateTo('shop'); 
-    const filtered = products.filter(p => p.category === cat); 
-    document.getElementById('productsGrid').innerHTML = filtered.map(p => `
-        <div class="product-card">
-            <h3>${p.name}</h3>
-            <div class="product-price">${p.price} DC</div>
-            <button class="product-btn" onclick="buyProduct('${p.name}', ${p.price}, ${p.id}, '${p.seller}', 'dravix')">Купить</button>
         </div>
     `).join('');
 }
