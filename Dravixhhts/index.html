@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dravix Shop | Маркетплейс</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="news-ticker" id="newsTicker">
+        <div class="ticker__label"><i class="fas fa-bolt"></i><span>АКЦИИ</span></div>
+        <div class="ticker__wrapper"><div class="ticker__content" id="tickerText">🔥 Добро пожаловать в Dravix Shop! 🔥 1 DravixCoin = 1 ₽ 🔥</div></div>
+    </div>
+
+    <header class="header">
+        <div class="header__logo" onclick="navigateTo('home')">DRAVIX</div>
+        <nav class="header__nav">
+            <a onclick="navigateTo('home')" class="nav-link active" data-page="home">Главная</a>
+            <a onclick="navigateTo('shop')" class="nav-link" data-page="shop">Магазин</a>
+            <a onclick="navigateTo('seller')" class="nav-link" data-page="seller">Товары продавцов</a>
+            <a onclick="navigateTo('rules')" class="nav-link" data-page="rules">Правила</a>
+            <a onclick="navigateTo('support')" class="nav-link" data-page="support">Поддержка</a>
+        </nav>
+        <div class="header__actions">
+            <div class="balance-display" id="balanceDisplay" style="display: none;"><i class="fas fa-coins"></i><span id="userBalance">0</span> DC</div>
+            <button class="btn-login" id="loginRegisterBtn" onclick="openAuthModal()"><i class="fas fa-user"></i><span>Войти</span></button>
+            <div class="profile-menu" id="profileMenu" style="display: none;">
+                <button class="btn-login" id="profileBtn"><span id="usernameDisplay"></span><span class="role-icon" id="userRoleIcon"></span><i class="fas fa-chevron-down"></i></button>
+                <div class="profile-dropdown">
+                    <div class="dropdown-item" onclick="openProfileModal()"><i class="fas fa-user"></i><span>Мой профиль</span></div>
+                    <div class="dropdown-item" onclick="openSellerPanel()"><i class="fas fa-store"></i><span>Панель продавца</span></div>
+                    <div class="dropdown-item" onclick="openDepositModal()"><i class="fas fa-wallet"></i><span>Пополнить баланс</span></div>
+                    <div class="dropdown-item" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()"><i class="fas fa-shield-alt"></i><span>Админ панель</span></div>
+                    <div class="dropdown-item" id="ownerPanelBtn" style="display: none;" onclick="openOwnerPanel()"><i class="fas fa-crown"></i><span>Панель владельца</span></div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Выйти</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="homePage" class="page-section active">
+            <div class="hero-banner">
+                <h1 class="hero-title">DRAVIX <span class="hero-highlight">SHOP</span></h1>
+                <p class="hero-desc">Маркетплейс цифровых товаров</p>
+                <div class="hero-stats">
+                    <div><span class="stat-value" id="totalSales">0</span><div>Продаж</div></div>
+                    <div><span class="stat-value" id="totalUsers">0</span><div>Пользователей</div></div>
+                    <div><span class="stat-value" id="totalSellers">0</span><div>Продавцов</div></div>
+                </div>
+            </div>
+            <div class="section-header"><h2 class="section-title">Категории</h2></div>
+            <div class="categories-grid">
+                <div class="category-card" onclick="openCategory('telegram')"><i class="fab fa-telegram"></i><h3>Telegram Premium</h3></div>
+                <div class="category-card" onclick="openCategory('stars')"><i class="fas fa-star"></i><h3>Telegram Stars</h3></div>
+                <div class="category-card" onclick="openCategory('steam')"><i class="fab fa-steam"></i><h3>Steam</h3></div>
+            </div>
+        </div>
+
+        <div id="shopPage" class="page-section">
+            <div class="section-header"><h2 class="section-title">Магазин Dravix</h2></div>
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <div id="sellerPage" class="page-section">
+            <div class="section-header"><h2 class="section-title">Товары от продавцов</h2></div>
+            <div class="products-grid" id="sellerProductsGrid"></div>
+        </div>
+
+        <div id="rulesPage" class="page-section">
+            <div class="section-header"><h2 class="section-title">Правила</h2></div>
+            <div class="rules-content">
+                <h3>1. DravixCoin</h3><p>1 DravixCoin = 1 ₽</p>
+                <h3>2. Подтверждение получения</h3><p>Деньги продавцу только после подтверждения покупателем</p>
+                <h3>3. Продавцы</h3><p>Могут выкладывать товары</p>
+            </div>
+        </div>
+
+        <div id="supportPage" class="page-section">
+            <div class="section-header"><h2 class="section-title">Поддержка</h2></div>
+            <div class="support-content">
+                <button class="product-btn" onclick="window.open('https://discord.gg/dravix', '_blank')"><i class="fab fa-discord"></i> Discord</button>
+                <button class="product-btn" onclick="window.open('https://t.me/dravix_shop', '_blank')"><i class="fab fa-telegram"></i> Telegram</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__top">
+            <!-- Логотип и описание -->
+            <div>
+                <div class="footer__logo">DRAVIX</div>
+                <div class="footer__desc">Маркетплейс цифровых товаров</div>
+            </div>
+            
+            <!-- Навигация -->
+            <div class="footer__links-group">
+                <div class="footer__links-title">Навигация</div>
+                <a onclick="navigateTo('home')">Главная</a>
+                <a onclick="navigateTo('shop')">Магазин</a>
+                <a onclick="navigateTo('seller')">Товары продавцов</a>
+                <a onclick="navigateTo('rules')">Правила</a>
+                <a onclick="navigateTo('support')">Поддержка</a>
+            </div>
+            
+            <!-- Контакты -->
+            <div class="footer__links-group">
+                <div class="footer__links-title">Контакты</div>
+                <a href="https://discord.gg/dravix" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+                <a href="https://t.me/dravix_shop" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="mailto:support@dravixshop.ru"><i class="fas fa-envelope"></i> support@dravixshop.ru</a>
+            </div>
+            
+            <!-- 👇👇👇 ССЫЛКА DRAVIXSHOP ДОБАВЛЕНА ЗДЕСЬ 👇👇👇 -->
+            <div class="footer__links-group">
+                <div class="footer__links-title">Наш проект</div>
+                <a href="https://dravixshop.ru" target="_blank" class="dravix-footer-link">
+                    <i class="fas fa-store"></i> Dravixshop
+                </a>
+                <a href="https://dravixshop.ru/shop" target="_blank">
+                    <i class="fas fa-shopping-cart"></i> Магазин Dravix
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer__bottom">
+            <div class="social-links">
+                <a href="https://discord.gg/dravix" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://t.me/dravix_shop" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://dravixshop.ru" target="_blank"><i class="fas fa-store"></i></a>
+            </div>
+            <div>© 2026 Dravix Shop. Все права защищены.</div>
+        </div>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="authModalTitle">Вход</h2>
+                <button class="modal-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="authError" style="color: #dc3545; display: none; margin-bottom: 15px;"></div>
+                <div id="loginForm">
+                    <div class="form-group"><label>Никнейм</label><input type="text" id="loginUsername" placeholder="Введите никнейм"></div>
+                    <div class="form-group"><label>Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль"></div>
+                    <button class="modal-btn submit" onclick="login()" style="width:100%">Войти</button>
+                    <div class="switch-form">Нет аккаунта? <span onclick="switchToRegister()">Зарегистрироваться</span></div>
+                </div>
+                <div id="registerForm" style="display:none">
+                    <div class="form-group"><label>Никнейм</label><input type="text" id="regUsername" placeholder="Придумайте никнейм"></div>
+                    <div class="form-group"><label>Пароль</label><input type="password" id="regPassword" placeholder="Придумайте пароль"></div>
+                    <div class="form-group"><label>Повтор пароля</label><input type="password" id="regConfirmPassword" placeholder="Повторите пароль"></div>
+                    <button class="modal-btn submit" onclick="register()" style="width:100%">Зарегистрироваться</button>
+                    <div class="switch-form">Уже есть аккаунт? <span onclick="switchToLogin()">Войти</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="profileModal"><div class="modal" style="width: 700px;"><div class="modal-header"><h2>Профиль</h2><button class="modal-close" onclick="closeProfileModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="profileModalBody"></div><div class="modal-footer"><button class="modal-btn cancel" onclick="closeProfileModal()">Закрыть</button><button class="modal-btn submit" onclick="saveProfile()">Сохранить</button></div></div></div>
+
+    <div class="modal-overlay" id="adminModal"><div class="modal" style="width: 800px;"><div class="modal-header"><h2>Админ панель</h2><button class="modal-close" onclick="closeAdminModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="adminModalBody"></div></div></div>
+
+    <div class="modal-overlay" id="ownerModal"><div class="modal" style="width: 800px;"><div class="modal-header"><h2><i class="fas fa-crown"></i> Панель владельца</h2><button class="modal-close" onclick="closeOwnerModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="ownerModalBody"></div></div></div>
+
+    <div class="modal-overlay" id="depositModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Пополнение баланса</h2>
+                <button class="modal-close" onclick="closeDepositModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Сумма (DravixCoin)</label><input type="number" id="depositAmount" placeholder="Введите сумму"></div>
+                <div class="form-group"><label>Способ оплаты</label>
+                    <select id="paymentMethod">
+                        <option value="demo">🧪 Тестовое пополнение (демо)</option>
+                        <option value="card">💳 Банковская карта</option>
+                        <option value="crypto">₿ Криптовалюта</option>
+                    </select>
+                </div>
+                <button class="modal-btn submit" onclick="processDeposit()" style="width:100%">Пополнить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirmModal"><div class="modal"><div class="modal-header"><h2>Подтверждение получения</h2><button class="modal-close" onclick="closeConfirmModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="confirmModalBody"></div><div class="modal-footer"><button class="modal-btn cancel" onclick="closeConfirmModal()">Отмена</button><button class="modal-btn submit confirm-btn" onclick="confirmReceipt()">✅ Подтвердить получение</button></div></div></div>
+
+    <!-- Подключаем JS файлы -->
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/owner.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
